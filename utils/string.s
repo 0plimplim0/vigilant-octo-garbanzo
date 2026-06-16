@@ -3,7 +3,7 @@
 .global strcmp
 strcmp:
   # strcmp(rdi = str1_start | rsi = str2_start | rdx = chars_limit(default=no_limit))
-  #Prologue
+  # Prologue
   push rbp
   mov rbp, rsp
   
@@ -55,6 +55,25 @@ strlen:
   inc eax
   jmp .strlen_loop
 .strlen_end:
+  mov rsp, rbp
+  pop rbp
+  ret
+
+.global findc
+findc:
+  # findc(rdi = str_start | rsi = char_obj) | Returns offset
+  # Prologue
+  push rbp
+  mov rbp, rsp
+  
+  xor eax, eax      # iterator
+.findc_loop:
+  cmp byte ptr [rdi+rax], sil
+  je .findc_epilogue
+  inc eax
+  jmp .findc_loop
+
+.findc_epilogue:
   mov rsp, rbp
   pop rbp
   ret
