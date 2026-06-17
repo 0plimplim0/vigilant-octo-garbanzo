@@ -77,3 +77,30 @@ findc:
   mov rsp, rbp
   pop rbp
   ret
+
+.global strrev
+strrev:
+  # strrev(rdi = str_start | rsi = str_len)
+  # Prologue
+  push rbp
+  mov rbp, rsp
+  
+  xor ecx, ecx      # Ptr1
+  xor edx, edx      # Temp1
+  xor r8d, r8d      # Temp2
+  dec esi        # Ptr2
+.strrev_loop:
+  cmp ecx, esi
+  jae .strrev_epilogue
+  mov dl, byte ptr [rdi+rcx]
+  mov r8b, byte ptr [rdi+rsi]
+  mov byte ptr [rdi+rcx], r8b
+  mov byte ptr [rdi+rsi], dl
+  inc ecx
+  dec esi
+  jmp .strrev_loop
+
+.strrev_epilogue:
+  mov rsp, rbp
+  pop rbp
+  ret
