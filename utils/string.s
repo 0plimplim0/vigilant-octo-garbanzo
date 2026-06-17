@@ -104,3 +104,65 @@ strrev:
   mov rsp, rbp
   pop rbp
   ret
+
+.global atoi
+atoi:
+  # atoi(rdi = str_start)
+  # Prologue
+  push rbx
+  push rbp
+  mov rbp, rsp
+
+  xor eax, eax      # Sum
+  xor ecx, ecx      # Iterator
+  mov ebx, 10
+  xor esi, esi
+.atoi_loop:
+  mov sil, byte ptr [rdi+rcx]
+  cmp sil, 0x0
+  je .atoi_epilogue
+  sub sil, 0x30
+  mul rbx
+  add eax, esi
+  inc ecx
+  jmp .atoi_loop
+
+.atoi_epilogue:
+  mov rsp, rbp
+  pop rbp
+  pop rbx
+  ret
+
+.global itoa
+itoa:
+  # itoa(rdi = integer | rsi = buff_start)
+  # Prologue
+  push rbx
+  push rbp
+  mov rbp, rsp
+  
+  xor ecx, ecx      # Temp 1
+  xor edx, edx
+  mov eax, edi
+  xor edi, edi      # Iterator
+  mov bl, 10
+.itoa_loop:
+  div bl
+  mov cl, ah
+  add cl, 0x30
+  mov byte ptr [rsi+rdi], cl
+  inc edi 
+  cmp al, 0x0
+  je .itoa_epilogue
+  movzx ax, al
+  jmp .itoa_loop
+
+.itoa_epilogue:
+  mov rcx, rdi
+  mov rdi, rsi
+  mov rsi, rcx
+  call strrev
+  mov rsp, rbp
+  pop rbp
+  pop rbx
+  ret
