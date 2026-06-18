@@ -105,8 +105,9 @@ strrev:
   pop rbp
   ret
 
-.global atoi
+.global uatoi
 atoi:
+  # WARNING: Currently only supports 32-bits nums
   # atoi(rdi = str_start)
   # Prologue
   push rbx
@@ -133,8 +134,9 @@ atoi:
   pop rbx
   ret
 
-.global itoa
+.global uitoa
 itoa:
+  # WARNING: Currently only supports 16-bit nums
   # itoa(rdi = integer | rsi = buff_start)
   # Prologue
   push rbx
